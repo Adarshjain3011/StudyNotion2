@@ -10,13 +10,14 @@ export interface IUser extends Document {
     userName: string;
     password: string;
     email: string;
-    userImage:string;
-    contactNumber: string;
+    userImage?:string;
+    contactNumber?: string;
     AccountType: AccountType,
     isVerified: boolean,
     tokenExpiry?: Date;
     token: string;
-    Profile:Schema.Types.ObjectId | IProfile;
+    Profile?:Schema.Types.ObjectId | IProfile;
+    
 }
 
 
@@ -33,7 +34,6 @@ const userSchema:Schema = new Schema({
 
         type: String,
         required: true,
-        unique: true,
 
     },
     email: {
@@ -51,8 +51,7 @@ const userSchema:Schema = new Schema({
     contactNumber: {
 
         type: String,
-        required: true,
-        unique: true,
+
 
     },
     AccountType: {
