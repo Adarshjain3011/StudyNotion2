@@ -5,7 +5,7 @@ import {dbConnection} from "@/config/dbConfig";
 
 import { isEMailExists } from "@/helper/isEmailExists";
 
-import {sendVerificationEmail} from "@/helper/mailSender";
+import {sendVerificationEmail} from "@/helper/resendMail";
 
 import bcrypt from "bcrypt"
 
