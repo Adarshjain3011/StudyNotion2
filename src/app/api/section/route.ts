@@ -8,12 +8,12 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { z } from "zod";
 
-const ratingAndReviewsSchema = z.object({
+const sectionChecker = z.object({
 
-    
+    sectionName: z.string(),
+    SubSectionId: z.string(),
 
-
-});
+})
 
 // create and delete it will handle 
 
@@ -140,7 +140,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
 
 // get all sub section using Section name 
-
 
 
 export async function GET(req: NextRequest, res: NextResponse) {
