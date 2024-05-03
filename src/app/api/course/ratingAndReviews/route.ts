@@ -1,9 +1,13 @@
 
 import RatingAndReview from "@/models/ratingAndReviewsModel";
 
+import mongoose from "mongoose";
+
 import { NextRequest, NextResponse } from "next/server";
 
 import { dbConnection } from "@/config/dbConfig";
+
+import { NextApiRequest } from "next";
 
 import { z } from "zod";
 
@@ -62,22 +66,22 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
             _id: course,
 
-            StudentEnrolled: {$elemMatch: {$eq: user}},
+            StudentEnrolled: { $elemMatch: { $eq: user } },
 
         })
 
 
-        if(!isUserEnrolled){
+        if (!isUserEnrolled) {
 
             return NextResponse.json({
 
-                message:"student is not enrolled",
-                data:null,
-                error:null,
+                message: "student is not enrolled",
+                data: null,
+                error: null,
 
-            },{
+            }, {
 
-                status:400,
+                status: 400,
 
             })
         }
@@ -125,15 +129,15 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
         // add this new rating the course 
 
-        const updatedCourse = await Course.findByIdAndUpdate(course,{
+        const updatedCourse = await Course.findByIdAndUpdate(course, {
 
-            $push:{
+            $push: {
 
-                RatingAndReviews:newRatingAndReview._id,
+                RatingAndReviews: newRatingAndReview._id,
 
             }
 
-        },{new:true})
+        }, { new: true })
 
 
         return NextResponse.json({
@@ -177,14 +181,84 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
 // get all rating and reviews 
 
+// get average rating and reviews
 
 
-export async function GET(req: NextRequest, res: NextResponse) {
+
+export async function GET(req: NextApiRequest, res: NextResponse) {
 
     try {
 
 
-        const allRatingAndReviews = await RatingAndReview.find({});
+        const { courseId, action } = req.query;
+
+
+        if (action === "averageRating") {
+
+            const result = await RatingAndReview.find(
+
+                {
+
+                    $match: {
+
+                        course: new mongoose.Types.ObjectId(courseId),
+                    }
+                },
+                {
+
+                    $group: {
+
+                        _id: null,
+                        averageRating: { $avg: "$rating" },
+                    },
+                }
+
+            )
+
+            if (result.length === 0) {
+
+                return NextResponse.json({
+
+                    message: "No reviews found with the corresponding course ID ",
+                    data: null,
+                    error: null,
+
+                }, {
+
+                    status: 400,
+                })
+            }
+
+            return NextResponse.json({
+
+                message: "sucessfully retrieved all rating and reviews",
+                data: result[0].averageRating,
+                error: null,
+
+            }, {
+
+                status: 200
+
+            })
+
+
+        }
+
+
+        const allRatingAndReviews = await RatingAndReview.find({})
+
+            .sort({ rating: "desc" }).populate({
+
+                path: "user",
+                select: "userName userImage email"
+
+            }).populate({
+
+                path: "course",
+                select: "courseName"
+
+            }).exec();
+
 
         return NextResponse.json({
 
@@ -215,7 +289,6 @@ export async function GET(req: NextRequest, res: NextResponse) {
     }
 
 }
-
 
 
 
