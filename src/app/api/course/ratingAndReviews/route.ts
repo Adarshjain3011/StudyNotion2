@@ -10,7 +10,7 @@ import { z } from "zod";
 const ratingAndReviewsChecker = z.object({
 
     user: z.string(),
-    rating: z.Number(),
+    rating: z.number(),
     review: z.string()
 
 })
@@ -76,6 +76,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
             })
         }
 
+
+
         // create the new rating and review
 
         const newRatingAndReview = await RatingAndReview.create({
@@ -84,9 +86,14 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
         })
 
+
+        
+
+
+
          return NextResponse.json({
 
-            message: "some error occurred while creating a new section",
+            message: "",
             error: null,
             data: newRatingAndReview
 

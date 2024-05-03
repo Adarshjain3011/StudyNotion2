@@ -14,6 +14,14 @@ export interface ISubSection extends Document {
 
 const subSectionSchema:Schema = new Schema({
 
+    sectionId:{
+
+        type:mongoose.Schema.Types.ObjectId,
+        
+        ref:"Section"
+
+    },
+
     Title:{
 
         type:String,

@@ -90,15 +90,16 @@ const courseSchema:Schema = new Schema({
 
         type:Schema.Types.ObjectId,
         ref:"Tag",
+        
     }],
 
 
-    StudentEnrolled:{
+    StudentEnrolled:[{
 
         type:Schema.Types.ObjectId,
         ref:"User",
 
-    }
+    }]
 
 
     
