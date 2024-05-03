@@ -7,7 +7,7 @@ import { ISection } from "@/models/sectionModel";
 
 import { IRatingAndReview } from "./ratingAndReviewsModel";
 
-import { ITag } from "./Tag";
+import { ICategory } from "./categoryModel";
 
 
 export interface ICourse extends Document {
@@ -20,7 +20,7 @@ export interface ICourse extends Document {
     RatingAndReviews:Schema.Types.ObjectId | IRatingAndReview, 
     price:string,
     thumbnail:string,
-    Tags:Schema.Types.ObjectId | ITag,
+    category:Schema.Types.ObjectId | ICategory,
 
     StudentEnrolled:Schema.Types.ObjectId | IUser
 
@@ -86,12 +86,12 @@ const courseSchema:Schema = new Schema({
 
     },
 
-    Tags:[{
+    category: {
 
-        type:Schema.Types.ObjectId,
-        ref:"Tag",
-        
-    }],
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Category",
+
+      },
 
 
     StudentEnrolled:[{
@@ -99,17 +99,21 @@ const courseSchema:Schema = new Schema({
         type:Schema.Types.ObjectId,
         ref:"User",
 
-    }]
+    }],
+    status: {
 
-
+        type: String,
+        enum: ["Draft", "Published"],
+      },
     
-})
-
-
+},{timestamps:true});
 
 export const Course = mongoose.models.Course || mongoose.model("Course",courseSchema);
 
 export default Course;
+
+
+
 
 
 

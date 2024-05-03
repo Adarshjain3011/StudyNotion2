@@ -21,7 +21,6 @@ const ratingAndReviewsSchema:Schema = new Schema({
         type:Schema.Types.ObjectId,
 
         ref:"User",
-
         required:true
 
     },
@@ -42,6 +41,7 @@ const ratingAndReviewsSchema:Schema = new Schema({
 
         type:String,
     }
+
 
 });
 

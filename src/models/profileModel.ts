@@ -1,5 +1,5 @@
 
-import mongoose, { Schema, Document, mongo } from "mongoose";
+import mongoose, { Schema, Document,} from "mongoose";
 
 
 export interface IProfile extends Document {

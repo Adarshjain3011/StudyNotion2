@@ -10,18 +10,18 @@ export interface IUser extends Document {
     userName: string;
     password: string;
     email: string;
-    userImage?:string;
+    userImage?: string;
     contactNumber?: string;
     AccountType: AccountType,
     isVerified: boolean,
     tokenExpiry?: Date;
     token: string;
-    Profile?:Schema.Types.ObjectId | IProfile;
-    
+    Profile?: Schema.Types.ObjectId | IProfile;
+
 }
 
 
-const userSchema:Schema = new Schema({
+const userSchema: Schema = new Schema({
 
     userName: {
 
@@ -43,7 +43,7 @@ const userSchema:Schema = new Schema({
         unique: true,
 
     },
-    userImage:{
+    userImage: {
 
         type: String,
 
@@ -67,8 +67,15 @@ const userSchema:Schema = new Schema({
         default: false,
 
     },
+    
+    course:[{
 
-    Profile:{
+        type:Schema.Types.ObjectId,
+        ref:"Course"
+        
+    }],
+
+    Profile: {
 
         type: Schema.Types.ObjectId,
         ref: "Profile",
@@ -83,7 +90,14 @@ const userSchema:Schema = new Schema({
     tokenExpiry: {
 
         type: Date,
-    }
+    },
+    courseProgress: [
+
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "courseProgress",
+        },
+    ],
 
 },
     {

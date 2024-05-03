@@ -3,7 +3,7 @@ import mongoose, { Document,Schema } from "mongoose";
 
 import { ICourse } from "./courseModel";
 
-export interface ITag extends Document {
+export interface ICategory extends Document {
 
 
     name: string;
@@ -11,8 +11,7 @@ export interface ITag extends Document {
 
 }
 
-
-const tagSchema:Schema = new Schema({
+const categorySchema:Schema = new Schema({
 
 
     name:{
@@ -32,10 +31,8 @@ const tagSchema:Schema = new Schema({
 
 
 
-export const Tag = mongoose.models.Tag || mongoose.model("Tag",tagSchema);
+export const Category = mongoose.models.Category || mongoose.model("Category",categorySchema);
 
-export default Tag;
-
-
+export default Category;
 
 
