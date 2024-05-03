@@ -7,9 +7,12 @@ import { dbConnection } from "@/config/dbConfig";
 
 import { z } from "zod";
 
+import Course from "@/models/courseModel";
+
 const ratingAndReviewsChecker = z.object({
 
     user: z.string(),
+    course: z.string(),
     rating: z.number(),
     review: z.string()
 
@@ -50,19 +53,51 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
         // ftech the data 
 
-        const { user, rating, review } = body;
-
-        // check the user is already give the rating 
+        const { user, rating, review, course } = body;
 
 
-        const isUserALeradyRating = await RatingAndReview.findOne({
+        // check the user enrolled in the course 
 
-            user: user,
+        const isUserEnrolled = await Course.findOne({
+
+            _id: course,
+
+            StudentEnrolled: {$elemMatch: {$eq: user}},
 
         })
 
 
-        if (isUserALeradyRating) {
+        if(!isUserEnrolled){
+
+            return NextResponse.json({
+
+                message:"student is not enrolled",
+                data:null,
+                error:null,
+
+            },{
+
+                status:400,
+
+            })
+        }
+
+        // is user is enrolled in the course 
+
+
+        // check the user is already give the rating 
+
+
+        const isUserAlreadyGiveRating = await RatingAndReview.findOne({
+
+            user: user,
+            course: course
+
+        })
+
+
+
+        if (isUserAlreadyGiveRating) {
 
             return NextResponse.json({
 
@@ -82,24 +117,35 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
         const newRatingAndReview = await RatingAndReview.create({
 
-            user, rating, review
+            user, rating, review, course
 
         })
 
 
-        
+
+        // add this new rating the course 
+
+        const updatedCourse = await Course.findByIdAndUpdate(course,{
+
+            $push:{
+
+                RatingAndReviews:newRatingAndReview._id,
+
+            }
+
+        },{new:true})
 
 
-
-         return NextResponse.json({
+        return NextResponse.json({
 
             message: "",
             error: null,
-            data: newRatingAndReview
+            data: updatedCourse
 
         }, {
 
             status: 200,
+
         })
 
 
@@ -127,33 +173,35 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
 
 
+
+
 // get all rating and reviews 
 
 
 
-export async function GET(req: NextRequest, res: NextResponse){
+export async function GET(req: NextRequest, res: NextResponse) {
 
-    try{
+    try {
 
 
         const allRatingAndReviews = await RatingAndReview.find({});
 
         return NextResponse.json({
 
-            message:"sucessfully retrieved all rating and reviews",
-            data:allRatingAndReviews,
-            error:null,
+            message: "sucessfully retrieved all rating and reviews",
+            data: allRatingAndReviews,
+            error: null,
 
-        },{
+        }, {
 
-            status:200
+            status: 200
         })
 
 
-    }catch(error:any){
+    } catch (error: any) {
 
         console.log(error.message);
-        
+
         return NextResponse.json({
 
             message: "some error occurred while getting all rating and reviews",

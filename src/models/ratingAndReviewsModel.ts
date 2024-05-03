@@ -25,6 +25,14 @@ const ratingAndReviewsSchema:Schema = new Schema({
         required:true
 
     },
+    course:{
+
+        type:Schema.Types.ObjectId,
+
+        ref:"Course",
+
+        required:true
+    },
     rating:{
 
         type:Number,

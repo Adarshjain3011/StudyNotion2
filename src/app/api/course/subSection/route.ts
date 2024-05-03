@@ -99,15 +99,31 @@ export async function POST(req: NextRequest,res:NextResponse){
 
         })
 
-        // successfully return the response 
 
+        // push this new sub section into the section 
+
+
+        const updatedSection = await Section.findByIdAndUpdate(isSectionExists._id,{
+
+
+            $push:{
+
+                subSectionName:newSubSection._id,
+
+            }
+
+        },{new:true}).populate("subSectionName").exec();
+
+
+
+        // successfully return the response 
 
 
         return NextResponse.json({
 
             message: "sub-section created successfully",
             error: null,
-            data: newSubSection
+            data: updatedSection
 
         }, {
 
