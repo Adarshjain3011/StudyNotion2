@@ -4,7 +4,7 @@ import mongoose, { Schema, Document,} from "mongoose";
 
 export interface IProfile extends Document {
 
-    genders: string,
+    gender: string,
     dob:Date,
     about:string
     contactNumber:string
