@@ -2,8 +2,8 @@
 export enum AccountType{
 
     ADMIN = "admin",
-    USER = "user",
-    Instruter = "instruter",
+    STUDENT = "student",
+    Instructor = "instructor",
 }
 
 

@@ -11,9 +11,9 @@ export default function Home() {
 
     <div className="text-3xl">
 
-      hellow world 
+      helow welcome to the default page 
 
-      <AppBar></AppBar>
+      {/* <AppBar></AppBar> */}
 
     </div>
     
