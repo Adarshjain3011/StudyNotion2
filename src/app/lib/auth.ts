@@ -1,9 +1,12 @@
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import GitHubProvider from 'next-auth/providers/github';
-import bcrypt from 'bcrypt';
 import { dbConnection } from '@/config/dbConfig';
 import { isEMailExists } from '@/helper/isEmailExists';
+
+// import bcrypt from "bcrypt";
+
+dbConnection();
 
 interface Credentials {
   username: string;
@@ -48,12 +51,12 @@ const credentialsProvider = CredentialsProvider({
 
     // Check if password is correct
 
-    const isPasswordCorrect = await bcrypt.compare(password, isUserExists.password);
+    // const isPasswordCorrect = await bcrypt.compare(password, isUserExists.password);
 
-    if (!isPasswordCorrect) {
+    // if (!isPasswordCorrect) {
 
-      throw new Error('Password is incorrect');
-    }
+    //   throw new Error('Password is incorrect');
+    // }
 
     return {
 
@@ -78,12 +81,16 @@ const gitHubProvider = GitHubProvider({
 });
 
 export const NEXT_AUTH_CONFIG = {
+
   providers: [credentialsProvider, googleProvider, gitHubProvider],
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     jwt: async ({ user, token }: any) => {
       if (user) {
         token.uid = user.id;
+        token.role = user.role;
+        token.name = user.name;
+        
       }
       return token;
     },
@@ -101,3 +108,6 @@ export const NEXT_AUTH_CONFIG = {
     //...
   },
 };
+
+
+

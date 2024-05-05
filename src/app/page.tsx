@@ -13,7 +13,7 @@ export default function Home() {
 
       helow welcome to the default page 
 
-      {/* <AppBar></AppBar> */}
+      <AppBar></AppBar>
 
     </div>
     
